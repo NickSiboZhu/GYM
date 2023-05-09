@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>customer</title>
+    <link rel="stylesheet" href="/static/css/manager.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- 网站的首页，所有网站的首页都叫index.html，因为服务器找首页都是找index.html -->
+    <!-- 布局；从外到内，从上到下，从左到右 -->
+    <!-- css：浮动/display;盒子模型;文字样式 -->
+
+    <!--头部header:负责头部区域的样式，wrapper只负责版心效果  -->
+    <div class="header wrapper">
+        <h1>
+            <a href="#"><img src="/static/img/logo.jpg" alt="标题"></a>
+        </h1>
+        <div class="nav">
+            <ul>
+                <li><a href="/customerapp">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">PROBLEM</a></li>
+            </ul>
+        </div>
+        <!-- 搜索 -->
+        <div class="search">
+        <input type="text" id="search-input" placeholder="ENTER HERE">
+        <button id="search-button">Search</button>
+    </div>
+        <div class="user">
+            <img src="/static/img/users.jpg" alt="">
+            <span>yuki</span>
+            <!-- 轮播图 -->
+        </div>
+    </div>
+    <div class="banner">
+        <div class="wrapper">
+            <div class="left">
+                <ul>
+                    <li><a href="/customerapp/coaches">Coaches<span>></span></a></li>
+                    <li><a href="/customerapp/commodities">Commodities<span>></span></a></li>
+                    <li><a href="/customerapp/courses">Courses<span>></span></a></li>
+                    <li><a href="/customerapp/c_equipment">Equipment<span>></span></a></li>
+                    <li><a href="/customerapp/c_cards">Cards<span>></span></a></li>
+                    <li><a href="/customerapp/c_block">Block<span>></span></a></li>
+                    <!--<li><a href="/customerapp/c_product">Product<span>></span></a></li>-->
+                    <li><a href="/customerapp/c_order">Order<span>></span></a></li>
+                    <li><a href="/customerapp/c_personal_info">Personal_info<span>></span></a></li>
+
+                </ul>
+            </div>
+            <div class="right">
+                <h2>MY SCHEDULE</h2>
+                <div class="content">
+                    <dl>
+                        <span>Monday:&nbsp;</span><span class="ai">Course YOGA</span>
+                        <dd>Alex</dd>
+                    </dl>
+                    <dl>
+                        <span>Friday:&nbsp;</span><span class="ai">Course RUN</span>
+                        <dd>Mark</dd>
+                    </dl>
+                    <dl>
+                        <span>Sunday:&nbsp;</span><span class="ai">Course YOGA</span>
+                        <dd>John</dd>
+                    </dl>
+                    <a href="#" class="more">ALL COURSE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 精品推荐 -->
+   <!-- <div class="goods wrapper">
+        <h2>RECOMMEND</h2>
+        <ul>
+            <li><a href="#">YOGA</a></li>
+            <li><a href="#">RUN</a></li>
+            <li><a href="#">Weight lifting</a></li>
+            <li><a href="#">C</a></li>
+            <li><a href="#">B</a></li>
+            <li><a href="#">A</a></li>
+        </ul>
+        <a href="#" class="xingqu">CHANGE</a>
+    </div> -->
+    <!-- 精品课程 -->
+    <div class="box wrapper">
+        <div class="title">
+        <h2>RECOMMEND COACHES</h2>
+            <a href="#">ALL</a>
+        </div>
+        <div class="content clearfix">
+             <ui id="coaches-list">
+               {% for row in data %}
+                <li class="coach-item">
+                  <form method="POST" action="{% url 'purchase' %}">
+                         {% csrf_token %}
+                    <img src="data:image/jpeg;base64,{{ row.avatar }}" alt="" width="227" height="170">
+                    <h3>NAME: {{ row.first_name }}  {{ row.last_name }}</h3>
+                    <p><span>{{ row.PHONE }}</span> Sex: {{ row.sex }}</p>
+
+                     </form>
+                </li>
+
+                {% endfor %}
+
+
+            </ui>
+        </div>
+    </div>
+
+</body>
+<script>
+    $(document).ready(function () {
+        $('#search-button').on('click', function () {
+            var searchText = $('#search-input').val().toLowerCase();
+            $('.coach-item').each(function () {
+                var coachName = $(this).find('h3').text().toLowerCase();
+                if (coachName.indexOf(searchText) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+</html>

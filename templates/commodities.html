@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>customer</title>
+    <link rel="stylesheet" href="/static/css/manager.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- 网站的首页，所有网站的首页都叫index.html，因为服务器找首页都是找index.html -->
+    <!-- 布局；从外到内，从上到下，从左到右 -->
+    <!-- css：浮动/display;盒子模型;文字样式 -->
+
+    <!--头部header:负责头部区域的样式，wrapper只负责版心效果  -->
+    <div class="header wrapper">
+        <h1>
+            <a href="#"><img src="/static/img/logo.jpg" alt="标题"></a>
+        </h1>
+        <div class="nav">
+            <ul>
+                <li><a href="/customerapp">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">PROBLEM</a></li>
+            </ul>
+        </div>
+        <!-- 搜索 -->
+        <div class="search">
+        <input type="text" id="search-input" placeholder="ENTER HERE">
+        <button id="search-button">Search</button>
+    </div>
+          <div class="balance">
+            <h2>Balance: {{ balance }}</h2>
+            <form method="post" action="{% url 'update_balance' %}">
+                {% csrf_token %}
+                <label for="amount">Add money to balance:</label>
+                <input type="text" name="amount" id="amount" required>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+    <div class="banner">
+        <div class="wrapper">
+            <div class="left">
+                <ul>
+                    <li><a href="/customerapp/coaches">Coaches<span>></span></a></li>
+                    <li><a href="/customerapp/commodities">Commodities<span>></span></a></li>
+                    <li><a href="/customerapp/courses">Courses<span>></span></a></li>
+                    <li><a href="/customerapp/c_equipment">Equipment<span>></span></a></li>
+                    <li><a href="/customerapp/c_cards">Cards<span>></span></a></li>
+                    <li><a href="/customerapp/c_block">Block<span>></span></a></li>
+                    <!--<li><a href="/customerapp/product">Product<span>></span></a></li>-->
+                    <li><a href="/customerapp/c_order">Order<span>></span></a></li>
+                    <li><a href="/customerapp/c_personal_info">Personal_info<span>></span></a></li>
+
+                </ul>
+            </div>
+            <div class="right">
+                <h2>SHOPPING RECORD</h2>
+
+                <div class="content">
+                    {% for supple in supple %}
+                    <dl>
+                        <span>{{ supple.3 }}&nbsp;</span><span class="ai">{{ supple.4 }}元</span>
+                        <dd>x{{ supple.2 }}</dd>
+                    </dl>
+                    {% endfor %}
+                    <a href="#" class="more">ALL</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 精品课程 -->
+    <div class="box wrapper">
+        <div class="title">
+        <h2>RECOMMEND COMMODITIES</h2>
+            <a href="#">ALL</a>
+        </div>
+        <div class="content clearfix">
+            <ui id="commodities-list">
+                {% for row in data %}
+                <li class="commodity-item">
+                  <form method="POST" action="{% url 'purchase' %}">
+                         {% csrf_token %}
+                    <img src="data:image/jpeg;base64,{{ row.image }}" alt="" width="227" height="170">
+                    <h3>{{ row.name }}</h3>
+                    <p><span>price:{{ row.price }}</span> stock: {{ row.stock }}</p>
+                    <input type="hidden" name="supplement_id" value="{{ row.S_id }}">
+                    <button type="submit">Buy</button>
+                     </form>
+                </li>
+
+                {% endfor %}
+
+
+            </ui>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#search-button').on('click', function () {
+            var searchText = $('#search-input').val().toLowerCase();
+            $('.commodity-item').each(function () {
+                var itemName = $(this).find('h3').text().toLowerCase();
+                if (itemName.indexOf(searchText) !== -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+</html>

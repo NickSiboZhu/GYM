@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="loadableContent">
+    <div style="background-color: lightblue; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        <h1 class="text-center">Coaches</h1>
+    </div>
+
+    <!-- Coaches list -->
+    <div class="row">
+        {% for coach in coaches %}
+        <div class="col-sm-4">
+            <div class="card">
+                <img src="data:image/png;base64, {{ coach.5 }}" class="card-img-top" alt="Avatar" width="250" height="250">
+                <div class="card-body">
+                    <h5 class="card-title">{{ coach.3 }} {{ coach.2 }}</h5>
+                    <p class="card-text">
+                        ID: {{ coach.0 }}<br>
+                        Sex: {{ coach.1 }}<br>
+                        Phone: {{ coach.4 }}
+                    </p>
+                    <form method="post" action="{% url 'manager:delete_coach' coach.0 %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger float-right delete-btn" data-coachid="{{ coach.0 }}">&times;</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add coach button -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCoachModal">
+        Add Coach
+    </button>
+
+    <!-- Add coach modal -->
+    <div class="modal fade" id="addCoachModal" tabindex="-1" role="dialog" aria-labelledby="addCoachModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCoachModalLabel">Add Coach</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'manager:add_coach' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="coach_id" value="{{ coach.0 }}">
+                        <button type="submit" class="btn btn-danger float-right">&times;</button>
+                        <div class="form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex">Sex:</label>
+                            <select class="form-control" id="sex" name="sex" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="avatar">Avatar:</label>
+                            <input type="file" class="form-control-file" id="avatar" name="avatar" accept="image/*">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add Coach</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+{% block extra_head %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="manager/static/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('.deleteForm').submit(function(e) {
+        e.preventDefault();
+        const url = $(this).attr('action');
+        const form = $(this);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.status === "success") {
+                    form.closest('.col-sm-4').remove();
+                } else {
+                    // Handle the error case
+                }
+            },
+            error: function() {
+                // Handle the error case
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+

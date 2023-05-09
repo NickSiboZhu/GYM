@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="loadableContent">
+    <div style="background-color: lightblue; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        <h1 class="text-center">Courses</h1>
+    </div>
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="data:image/png;base64,{{ course.block_image }}" class="card-img-top" alt="Block image" width="250" height="250">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.name }}</h5>
+                    <p class="card-text">Time: {{ course.time }}</p>
+                    <p class="card-text">Coach: {{ course.coach_name }}</p>
+                    <p class="card-text">Block: {{ course.block_name }}</p>
+                    <form method="post" action="{% url 'manager:delete_course' course.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addCourseModal">Add Course</button>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCourseModalLabel">Add Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'manager:add_course' %}" id="addCourseForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="courseName" class="form-label">Course Name</label>
+                            <input type="text" class="form-control" id="courseName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseTime" class="form-label">Course Time</label>
+                            <input type="text" class="form-control" id="courseTime" name="time" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="coachId" class="form-label">Coach ID</label>
+                            <input type="number" class="form-control" id="coachId" name="coach_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="blockId" class="form-label">Block ID</label>
+                            <input type="number" class="form-control" id="blockId" name="block_id" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                            </button>
+                            <button type="submit" class="btn btn-primary">Add Course</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="manager/static/js/bootstrap.min.js"></script>
+{% endblock %}
+
+
+

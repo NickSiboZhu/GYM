@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="loadableContent">
+    <div style="background-color: lightblue; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        <h1 class="text-center">Membership</h1>
+    </div>
+    <div class="row">
+        {% for membership in memberships %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ membership.first_name }} {{ membership.last_name }}</h5>
+                    <p class="card-text">
+                        Account: {{ membership.account }}<br>
+                        Customer ID: {{ membership.customer_id }}<br>
+                        Start Date: {{ membership.start_date }}<br>
+                        End Date: {{ membership.end_date }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div style="background-color: lightblue; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        <h1 class="text-center">Welcome to the GYM Manager System</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <img src="{% static 'GYM_dash.jpg' %}" class="img-fluid mt-4 mb-4" alt="GYM Dashboard" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Management Operation Guide</h2>
+            <p>
+                In our GYM Manager System, you can perform various management tasks through the following interfaces:
+            </p>
+            <ul>
+                <li><strong>Coaches:</strong> Add, edit, and delete coaches in the system. View coach information such as name, ID, sex, phone number, and avatar.</li>
+                <li><strong>Supplements</strong> Add,edit, and delete supplements in the system. View supplement information such as name. price, stock, and image.</li>
+                <li><strong>Courses:</strong> Add, edit, and delete courses. View course information such as name, time, coach, and block.</li>
+                <li><strong>Equipment:</strong> Add, edit, and delete gym equipment. View equipment information such as name and associated block.</li>
+                <li><strong>Membership cards</strong>View all the member information such as name, account, customer ID, start date and end date.</li>
+                <li><strong>Personal Information</strong>View all the customer information such as ID, name, sex, phone number, account and balance.</li>
+                <li><strong>Data_visual:</strong> View the number of coaches, supplements, equipments and customers.</li>
+            </ul>
+            <p>
+                Navigate to the respective interface using the sidebar menu to perform the desired management tasks.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

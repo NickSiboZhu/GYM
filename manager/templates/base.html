@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Include jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Include Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
+    }
+
+    .sidebar {
+      background-color: #343a40;
+      padding-top: 1rem;
+      height: 100vh;
+      border-right: 1px solid #ccc;
+      width: 250px;
+    }
+
+    .nav-link {
+      color: #adb5bd;
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-bottom: 1px solid #495057;
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+      background-color: #495057;
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      color: #ffffff;
+      background-color: #495057;
+    }
+
+    .gym-name {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff4a4a;
+      text-align: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #495057;
+    }
+
+    .toggle-btn {
+      background-color: #495057;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #495057;
+      cursor: pointer;
+    }
+
+    .logout-divider {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #495057;
+}
+
+    .logout-link-container {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-sm-4 sidebar">
+        <div class="gym-name">DreamGym</div>
+        <ul class="nav flex-column" id="sideMenu">
+          <li class="nav-item">
+              <div class="dashboard-item">
+             <div class="toggle-btn" data-toggle="collapse" data-target="#additionalLinks">&#9776;</div>
+              <a class="nav-link active" href="{% url 'manager:manager_dashboard' %}" data-content-url="{% url 'manager:manager_dashboard' %}">Dashboard</a>
+            </div>
+          </li>
+          <div id="additionalLinks" class="collapse">
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:coaches' %}">Coaches</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:supplements' %}">Supplements</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:courses' %}">Courses</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:equipment' %}">Equipment</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-content-url="{% url 'manager:membership_cards' %}">Membership Cards</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:personal_info' %}">Personal Information</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-content-url="{% url 'manager:data_visual' %}">Data_visual</a>
+            </li>
+          </div>
+        </ul>
+
+        <div class="logout-divider"></div>
+            <div class="logout-link-container">
+                <a class="nav-link logout-link" href="{% url 'gymapp:index' %}">Logout</a>
+            </div>
+
+      </div>
+      <!-- Content area -->
+      <div class="col-md-9 col-sm-8">
+        <div id="contentArea">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+
+<script>
+    let currentActiveUrl = "{% url 'manager:manager_dashboard' %}";
+
+  $(document).ready(function () {
+    $(".nav-link").click(function (e) {
+      const url = $(this).data("content-url");
+
+      // Load content into right content area
+      $("#contentArea").load(url + " #loadableContent");
+    });
+  });
+
+  function loadContent(url) {
+      if (url === currentActiveUrl) {
+         return;
+        }
+        currentActiveUrl = url;
+
+
+    $.ajax({
+      url: url,
+      type: 'GET',
+      success: function (data) {
+        $('#contentArea').html(data);
+      },
+      error: function (xhr, status, error) {
+        console.error('Error loading content:', error);
+      }
+    });
+  }
+
+  $('.nav-link[data-content-url]').on('click', function (e) {
+  e.preventDefault();
+  loadContent($(this).data('content-url'));
+});
+
+</script>
+
+</body>
+</html>

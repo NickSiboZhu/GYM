@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>customer</title>
+    <link rel="stylesheet" href="/static/css/manager.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <script>
+        const customer_id = "{{ customer_id }}";
+    </script>
+
+    <!-- Rest of the HTML code -->
+    <div class="header wrapper">
+        <h1>
+            <a href="#"><img src="/static/img/logo.jpg" alt="标题"></a>
+        </h1>
+        <div class="nav">
+            <ul>
+                <li><a href="/customerapp">HOME</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">PROBLEM</a></li>
+            </ul>
+        </div>
+        <!-- 搜索 -->
+        <div class="search">
+            <input type="text" placeholder="ENTER HERE">
+            <button></button>
+        </div>
+    </div>
+    <div class="banner">
+        <div class="wrapper">
+            <div class="left">
+                <ul>
+                    <li><a href="/customerapp/coaches">Coaches<span>></span></a></li>
+                    <li><a href="/customerapp/commodities">Commodities<span>></span></a></li>
+                    <li><a href="/customerapp/courses">Courses<span>></span></a></li>
+                    <li><a href="/customerapp/c_equipment">Equipment<span>></span></a></li>
+                    <li><a href="/customerapp/c_cards">Cards<span>></span></a></li>
+                    <li><a href="/customerapp/c_block">Block<span>></span></a></li>
+                    <!--<li><a href="/customerapp/c_product">Product<span>></span></a></li>-->
+                    <li><a href="/customerapp/c_order">Order<span>></span></a></li>
+                    <li><a href="/customerapp/c_personal_info">Personal_info<span>></span></a></li>
+
+                </ul>
+            </div>
+            <div class="right">
+                <h2>MY SCHEDULE</h2>
+                <div class="content">
+                    <dl>
+                        <span>Monday:&nbsp;</span><span class="ai">Course YOGA</span>
+                        <dd>Alex</dd>
+                    </dl>
+                    <dl>
+                        <span>Friday:&nbsp;</span><span class="ai">Course RUN</span>
+                        <dd>Mark</dd>
+                    </dl>
+                    <dl>
+                        <span>Sunday:&nbsp;</span><span class="ai">Course YOGA</span>
+                        <dd>John</dd>
+                    </dl>
+                    <a href="#" class="more">ALL COURSE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box wrapper">
+        <div class="title">
+        <h2>Do You Want Join Us?</h2>
+            <a href="#">ALL</a>
+        </div>
+        <div>
+            <h3>Junior Member - 6 months - $500</h3>
+            <button class="join-member" data-member-type="junior">Join</button>
+        </div>
+        <div>
+            <h3>Senior Member - 1 year - $1000</h3>
+            <button class="join-member" data-member-type="senior">Join</button>
+        </div>
+    </div>
+
+    <script>
+function joinMembership(memberType) {
+    const membershipData = {
+        customer_id: customer_id,
+        membership_type: memberType
+    };
+
+    $.ajax({
+        url: '/customerapp/register_membership/',
+        type: 'POST',
+        data: JSON.stringify(membershipData),
+        contentType: 'application/json; charset=utf-8',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Successfully joined the membership!');
+            } else {
+                alert(response.error);
+            }
+        },
+        error: function() {
+            alert('An error occurred while processing your request. Please try again.');
+        }
+    });
+}
+
+
+
+        $(document).ready(function() {
+            $('.join-member').click(function() {
+                const memberType = $(this).data('member-type');
+                joinMembership(memberType);
+            });
+        });
+
+
+    </script>
+</body>
+</html>
